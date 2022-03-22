@@ -1,0 +1,16 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    flex: 0.3;
+}
+.sidebar_header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #F0F2F5 !important;
+}
+.header_right {
+    display: flex;
+    justify-content: space-between;
+    min-width: 8vw;
+}
