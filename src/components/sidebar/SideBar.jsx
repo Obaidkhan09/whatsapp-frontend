@@ -3,8 +3,9 @@ import DataSaverOffIcon from '@mui/icons-material/DataSaverOff';
 import ChatIcon from '@mui/icons-material/Chat';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
-import { MoreVert } from '@mui/icons-material';
 import Avatar from '@mui/material/Avatar';
+import SearchIcon from '@mui/icons-material/Search';
+import ChatList from './ChatList';
 
 export default function SideBar() {
   return (
@@ -15,16 +16,25 @@ export default function SideBar() {
             </div>
             <div className='header_right'>
                 <IconButton>
-                    <DataSaverOffIcon/>
+                    <DataSaverOffIcon />
                 </IconButton>
                 <IconButton>
                     <ChatIcon />
                 </IconButton>
                 <IconButton>
-                    <MoreVert />
+                    <MoreVertIcon />
                 </IconButton>
             </div>
         </div>
+        <div className='sidebar_search'>
+            <div className="sidebar_searchbar">
+                <SearchIcon />
+                <input type='text' placeholder='Search or start new chat' />
+            </div>
+        </div>
+        <ChatList />
+        <ChatList />
+        <ChatList />
     </div>
   )
 }

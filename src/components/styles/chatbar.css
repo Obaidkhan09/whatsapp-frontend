@@ -1,5 +1,76 @@
-.chatbar {
+.chat_bar {
     display: flex;
     flex-direction: column;
     flex: 0.7;
+}
+.chat_header {
+    display: flex;
+    padding: 10px 15px 10px 25px;
+    align-items: center;
+    background-color: #F0F2F5;
+    border-left: 1px solid #a0a0a0dc;
+}
+.chat_info {
+    flex: 1;
+    padding-left: 20px;
+}
+.chat_info > h4 {
+    font-weight: 500;
+}
+.chat_info > p {
+    color: grey;
+    font-size: 14px;
+}
+.chat_body {
+    flex: 1;
+    background-image: url(https://cdn.wallpapersafari.com/91/2/DExBhK.jpg);
+    background-repeat: repeat;
+    background-position: center;
+    overflow-y: scroll;
+    padding: 25px;
+}
+.chat_message {
+    position: relative;
+    background-color: white !important;
+    border-radius: 10px;
+    font-size: 15px;
+    padding: 10px;
+    width: fit-content;
+    margin-bottom: 25px ;
+}
+.chat_name {
+    position: absolute;
+    top: -20px;
+    font-weight: 700;
+    font-size: small;
+
+}
+.chat_time {
+    font-size: x-small;
+    margin-left: 10px;
+}
+.chat_receiver {
+    background-color: #D9FDD3 !important;
+    margin-left: auto;
+}
+.chat_footer {
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+    align-items: center;
+    padding: 0px 10px;
+    background-color: #F0F2F5;
+}
+.chat_footer > form {
+    display: flex;
+    flex: 1;
+}
+.chat_footer > form > input {
+    flex: 1;
+    border-radius: 5px;
+    background-color: white;
+    border: 0px;
+    outline-width: 0px;
+    padding: 10px;
+    margin: 7px 3px;
 }
