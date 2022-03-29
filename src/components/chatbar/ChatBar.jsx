@@ -8,8 +8,10 @@ import SendIcon from '@mui/icons-material/Send';
 import MicIcon from '@mui/icons-material/Mic';
 
 import '../styles/chatbar.css'
+import { useSelector } from 'react-redux';
 
 export default function ChatBar() {
+  const messages = useSelector((state) => state.messagesData.messages);
   return (
     <div className='chat_bar'>
       <div className="chat_header">
@@ -31,22 +33,14 @@ export default function ChatBar() {
         </div>
       </div>
       <div className="chat_body">
-        <p className='chat_message'>
-          <span className='chat_name'>Client 1</span>
-          This is a dummy message, how are you doin?
-          <span className='chat_time'>{new Date().toUTCString()}</span>
-        </p>
-
-        <p className='chat_message chat_receiver'>
-          <span className='chat_name'>Me</span>
-          This is a dummy message, how are you doin?
-          <span className='chat_time'>{new Date().toUTCString()}</span>
-        </p>
-        <p className='chat_message'>
-          <span className='chat_name'>Client 1</span>
-          This is a dummy message, how are you doin?
-          <span className='chat_time'>{new Date().toUTCString()}</span>
-        </p>
+        {messages.map((items) => (
+          <p key={items._id} className={`${items.received === true ? "chat_message" : "chat_receiver chat_message"}`}>
+            {/* <span className='chat_name'>Client 1</span> */}
+            {items.messages}
+            <span className='chat_time'>{items.timeStamp}</span>
+          </p>
+        ))}
+        
       </div>
 
       <div className="chat_footer">
