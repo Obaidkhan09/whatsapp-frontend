@@ -27,7 +27,9 @@
     background-repeat: repeat;
     background-position: center;
     overflow-y: scroll;
-    padding: 25px;
+    padding: 15px 20px 10px 20px;
+    display: flex;
+    flex-direction: column-reverse;
 }
 .chat_message {
     position: relative;
@@ -36,7 +38,8 @@
     font-size: 15px;
     padding: 10px;
     width: fit-content;
-    margin-bottom: 25px ;
+    margin-bottom: 3px ;
+    box-shadow: 1px 1px 1px 1px rgb(0,0,0,0.3);
 }
 .chat_name {
     position: absolute;
@@ -46,7 +49,7 @@
 
 }
 .chat_time {
-    font-size: x-small;
+    font-size: xx-small;
     margin-left: 10px;
 }
 .chat_receiver {

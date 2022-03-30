@@ -1,3 +1,6 @@
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
+
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
@@ -7,10 +10,24 @@ import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt
 import SendIcon from '@mui/icons-material/Send';
 import MicIcon from '@mui/icons-material/Mic';
 
+import axios from '../../utils/axios'
+
 import '../styles/chatbar.css'
-import { useSelector } from 'react-redux';
+import moment from 'moment';
 
 export default function ChatBar() {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const currentTime = new Date();
+    await axios.post("messages/new", {
+      name: "Hard Coded",
+      messages: value,
+      timeStamp: currentTime,
+      received: true
+    });
+    setValue("");
+  }
+  const [value, setValue] = useState("");
   const messages = useSelector((state) => state.messagesData.messages);
   return (
     <div className='chat_bar'>
@@ -34,13 +51,14 @@ export default function ChatBar() {
       </div>
       <div className="chat_body">
         {messages.map((items) => (
-          <p key={items._id} className={`${items.received === true ? "chat_message" : "chat_receiver chat_message"}`}>
-            {/* <span className='chat_name'>Client 1</span> */}
-            {items.messages}
-            <span className='chat_time'>{items.timeStamp}</span>
-          </p>
-        ))}
-        
+            <p key={items._id} className={`${items.received === true ? "chat_message" : "chat_receiver chat_message"}`}>
+              {/* <span className='chat_name'>Client 1</span> */}
+              {items.messages}
+              <span className='chat_time'>{moment(items.timeStamp).fromNow()}</span>
+            </p>
+          )
+        )}
+
       </div>
 
       <div className="chat_footer">
@@ -48,8 +66,12 @@ export default function ChatBar() {
           <SentimentSatisfiedAltIcon />
         </IconButton>
         <form>
-          <input placeholder='Type a message' />
-          <IconButton type='submit'>
+          <input
+            value={value}
+            placeholder='Type a message'
+            onChange={(e) => { setValue(e.target.value) }}
+          />
+          <IconButton onClick={handleSubmit} type='submit'>
             <SendIcon />
           </IconButton>
         </form>
