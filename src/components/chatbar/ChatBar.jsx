@@ -9,6 +9,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import SendIcon from '@mui/icons-material/Send';
 import MicIcon from '@mui/icons-material/Mic';
+import Picker from 'emoji-picker-react';
 
 import axios from '../../utils/axios'
 
@@ -28,7 +29,14 @@ export default function ChatBar() {
     setValue("");
   }
   const [value, setValue] = useState("");
+  const [status, setStatus] = useState(false);
   const messages = useSelector((state) => state.messagesData.messages);
+  const handleEmoji = (event, emojiObj) => {
+    setValue(value + emojiObj.emoji)
+  }
+  const handleEmojiVisible = () => {
+    setStatus(!status);
+  }
   return (
     <div className='chat_bar'>
       <div className="chat_header">
@@ -51,18 +59,21 @@ export default function ChatBar() {
       </div>
       <div className="chat_body">
         {messages.map((items) => (
-            <p key={items._id} className={`${items.received === true ? "chat_message" : "chat_receiver chat_message"}`}>
-              {/* <span className='chat_name'>Client 1</span> */}
-              {items.messages}
-              <span className='chat_time'>{moment(items.timeStamp).fromNow()}</span>
-            </p>
-          )
+          <p key={items._id} className={`${items.received === true ? "chat_message" : "chat_receiver chat_message"}`}>
+            {/* <span className='chat_name'>Client 1</span> */}
+            {items.messages}
+            <span className='chat_time'>{moment(items.timeStamp).fromNow()}</span>
+          </p>
+        )
         )}
 
       </div>
 
       <div className="chat_footer">
-        <IconButton>
+        {status && <Picker
+          pickerStyle={{ position: "absolute", bottom: "90px" }}
+          onEmojiClick={handleEmoji} />}
+        <IconButton onClick={handleEmojiVisible}>
           <SentimentSatisfiedAltIcon />
         </IconButton>
         <form>
