@@ -8,23 +8,33 @@ import SearchIcon from '@mui/icons-material/Search';
 import ChatList from './ChatList';
 
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import '../styles/sidebar.css'
+import { useDispatch } from 'react-redux';
+import { signOut } from '../../features/authSlice';
+import AllUser from './AllUser';
 
 export default function SideBar() {
-    const [open, setOpen] = useState(false);
+    const dispatch = useDispatch();
+    const [users, setUsers] = useState(false);
+    const [logout, setLogout] = useState(false);
 
-    const handleClickOpen = () => {
-        setOpen(true);
+    const handleUsers = () => {
+        setUsers(!users);
+    };
+    const handleLogout = () => {
+        setLogout(!logout);
     };
 
     const handleClose = () => {
-        setOpen(false);
+        setLogout(false);
+    };
+    const handleCloseLogout = () => {
+        setLogout(false);
+        dispatch(signOut());
     };
     return (
         <div className='sidebar'>
@@ -33,13 +43,13 @@ export default function SideBar() {
                     <Avatar src="https://1.bp.blogspot.com/-yJWQPGx4_hM/YAh4vu0roMI/AAAAAAAAkrI/0srkD4R2FR0sgiPdVzLCLtEVmZR-lS4fwCLcBGAsYHQ/s811/whatsapp%2Bdp%2Bimages%2Bfor%2Bboys%2B%252810%2529.jpg" />
                 </div>
                 <div className='header_right'>
-                    <IconButton onClick={handleClickOpen} >
+                    <IconButton >
                         <AddCircleOutlineIcon />
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={handleUsers}>
                         <ChatIcon />
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={handleLogout}>
                         <MoreVertIcon />
                     </IconButton>
                 </div>
@@ -50,26 +60,24 @@ export default function SideBar() {
                     <input type='text' placeholder='Search or start new chat' />
                 </div>
             </div>
-            <ChatList />
-            <ChatList />
-            <ChatList />
+            {users? <AllUser /> : <ChatList /> }
             {/* ADD NEW CHAT */}
             <div>
-                <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>Enter Name for Chat</DialogTitle>
-                    <DialogContent>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="Name for chat"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                        />
-                    </DialogContent>
+                <Dialog open={logout} onClose={handleClose}>
+                    <DialogTitle>Do you really wish to LogOut?</DialogTitle>
                     <DialogActions>
-                        <Button variant='outlined' onClick={handleClose}>Add Chat</Button>
+                        <Button
+                        variant='outlined'
+                        onClick={handleCloseLogout}
+                        style={{
+                            color: '#E62E2D',
+                            fontWeight: 600,
+                            border: "1px solid #E62E2D",
+                            textDecoration: "none",
+                        }}
+                        >
+                            LogOut
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </div>

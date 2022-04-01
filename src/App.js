@@ -1,10 +1,15 @@
 import ChatBar from "./components/chatbar/ChatBar";
 import SideBar from "./components/sidebar/SideBar";
 import Pusher from 'pusher-js'
-import './components/styles/app.css'
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { addNewMessages } from "./features/messagesSlice";
+import Auth from "./components/home/Auth";
+import Home from "./components/home/Home";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+
 
 function App() {
   const dispatch = useDispatch();
@@ -21,11 +26,27 @@ function App() {
     });
   }, [])
   return (
-    <div className="app">
-      <div className="app_window">
-        <SideBar />
-        <ChatBar />
-      </div>
+    <div>
+      <ToastContainer
+        limit={3}
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+      />
+
+      
+      <BrowserRouter >
+        <Routes>
+          <Route path="/" element={ <Auth /> } />
+          <Route path="/home" element={ <Home /> } />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
