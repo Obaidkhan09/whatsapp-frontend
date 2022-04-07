@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
-import { signUp } from '../../features/authSlice';
+import { loadUser, signUp } from '../../features/authSlice';
 import axios from '../../utils/axios';
 import { toast } from "react-toastify";
 
@@ -24,7 +24,9 @@ export default function SignUp() {
     try {
       const token = await axios.post('/api/signup', user);
       dispatch(signUp(token.data))
-    console.log(token);
+      //Loading user from local storage if any
+      dispatch(loadUser());
+      console.log(token);
       setUser({
         name: "",
         email: "",
