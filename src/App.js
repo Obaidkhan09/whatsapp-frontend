@@ -5,24 +5,38 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { addNewMessages } from "./features/messagesSlice";
+// import { addNewMessages } from "./features/messagesSlice";
 import Auth from "./components/home/Auth";
 import Home from "./components/home/Home";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { addNewMessage } from "./features/chatListSlice";
 
 
 function App() {
   const dispatch = useDispatch();
   const messages = useSelector((state) => state.messagesData.messages);
   console.log(messages);
+  // useEffect(() => {
+  //   const pusher = new Pusher(process.env.REACT_APP_PUSHER_TOKEN, {
+  //     cluster: 'ap2'
+  //   });
+
+  //   const channel = pusher.subscribe('messages');
+  //   channel.bind('inserted', (data) => {
+  //     dispatch(addNewMessages(data));
+  //   });
+  // }, [])
   useEffect(() => {
     const pusher = new Pusher(process.env.REACT_APP_PUSHER_TOKEN, {
       cluster: 'ap2'
     });
 
-    const channel = pusher.subscribe('messages');
+    const channel = pusher.subscribe('chat');
     channel.bind('inserted', (data) => {
-      dispatch(addNewMessages(data));
+      alert(data);
+    });
+    channel.bind('updated', (data) => {
+      dispatch(addNewMessage(data));
     });
   }, [])
   return (

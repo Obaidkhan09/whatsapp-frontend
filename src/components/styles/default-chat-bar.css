@@ -1,0 +1,14 @@
+.default {
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    margin-top: auto;
+    margin-bottom: auto;
+    text-align: center;
+    width: 100%;
+}
+
+.img-class{
+    width: 200px;
+    margin-top: 25px;
+}
