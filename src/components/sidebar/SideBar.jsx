@@ -17,7 +17,7 @@ import { useDispatch } from 'react-redux';
 import { signOut } from '../../features/authSlice';
 import AllUser from './AllUser';
 
-export default function SideBar({setChatBar}) {
+export default function SideBar({setChatBar, refrence}) {
     const dispatch = useDispatch();
     const [users, setUsers] = useState(false);
     const [logout, setLogout] = useState(false);
@@ -35,6 +35,7 @@ export default function SideBar({setChatBar}) {
     const handleCloseLogout = () => {
         setLogout(false);
         dispatch(signOut());
+        localStorage.removeItem('members');
     };
     return (
         <div className='sidebar'>
@@ -60,7 +61,7 @@ export default function SideBar({setChatBar}) {
                     <input type='text' placeholder='Search or start new chat' />
                 </div>
             </div>
-            {users? <AllUser /> : <ChatList setChatBar={setChatBar} /> }
+            {users? <AllUser setUsers={setUsers} /> : <ChatList refrence={refrence} setChatBar={setChatBar} /> }
             {/* ADD NEW CHAT */}
             <div>
                 <Dialog open={logout} onClose={handleClose}>

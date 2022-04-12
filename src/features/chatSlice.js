@@ -42,8 +42,10 @@ const chatSlice = createSlice({
             state.status = "rejected";
         },
         [fetchAllMessages.fulfilled] : (state, action) => {
-            state.messages = action.payload[0].messages;
-            state.status = true;
+            if (action.payload[0]) {
+                state.messages = action.payload[0].messages;
+                state.status = true;
+            }
         }
     }
 });

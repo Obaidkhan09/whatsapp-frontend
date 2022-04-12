@@ -18,31 +18,33 @@ import axios from '../../utils/axios'
 import '../styles/chatbar.css'
 // import moment from 'moment';
 import Messages from './Messages';
-import { addNewMessage } from '../../features/chatSlice';
+import { fetchAllMessages } from '../../features/chatSlice';
 
-export default function ChatBar() {
+export default function ChatBar({ refrence }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const currentTime = new Date().toUTCString();
     const currentSender = auth.name;
     const temp = {
-        message : value,
-        timeStamp : currentTime,
-        sender :currentSender,
-      }
-    await axios.post("chat/new", {
-      ...chatMessages,
-      messages : temp,
-    });
-    setValue("");
+      message: value,
+      timeStamp: currentTime,
+      sender: currentSender,
+    }
+    if (value !== "") {
+      await axios.post("chat/new", {
+        ...chatMessages,
+        messages: temp,
+      });
+      setValue("");
+      dispatch(fetchAllMessages(auth._id));
+    }
   }
   const [value, setValue] = useState("");
   const [status, setStatus] = useState(false);
   // const messages = useSelector((state) => state.messagesData.messages);
   const dispatch = useDispatch();
-  const chatMessages = useSelector((state)=> state.chat.details);
+  const chatMessages = useSelector((state) => state.chat.details);
   const auth = useSelector((state) => state.auth);
-  const userDetails = useSelector((state)=> state.chat.details);
   const handleEmoji = (event, emojiObj) => {
     setValue(value + emojiObj.emoji);
   }
@@ -54,10 +56,10 @@ export default function ChatBar() {
       <div className="chat_header">
         <Avatar />
         <div className="chat_info">
-          {console.log("chatMessagesssssssss",chatMessages)}
-          {console.log("MSGSSSSSSSS",chatMessages.messages[chatMessages.messages.length -1])}
-          <h4>{auth.name == chatMessages.sender? chatMessages.receiver : chatMessages.sender}</h4>
-          <p>{`Last Message ${moment(chatMessages.messages[chatMessages.messages.length -1].timeStamp).fromNow()}`}</p>
+          {/* {console.log("chatMessagesssssssss",chatMessages)}
+          {console.log("MSGSSSSSSSS",chatMessages.messages[chatMessages.messages.length -1])} */}
+          <h4>{auth.name === chatMessages.sender ? chatMessages.receiver : chatMessages.sender}</h4>
+          <p>{`Last Message ${moment(chatMessages.messages[chatMessages.messages.length - 1] ? chatMessages.messages[chatMessages.messages.length - 1].timeStamp : chatMessages.timeStamp).fromNow()}`}</p>
         </div>
         <div className="chat_icons">
           <IconButton>
@@ -93,6 +95,9 @@ export default function ChatBar() {
         </IconButton>
         <form>
           <input
+            autoFocus
+            //refrence passed as a prop from Home.jsx
+            ref={refrence}
             value={value}
             placeholder='Type a message'
             onChange={(e) => { setValue(e.target.value) }}

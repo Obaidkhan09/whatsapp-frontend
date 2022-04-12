@@ -8,6 +8,7 @@ import Auth from "./components/home/Auth";
 import Home from "./components/home/Home";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { addNewMessage, fetchAllMessages } from "./features/chatSlice";
+import { fetchAllChat } from './features/chatListSlice';
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
       const members = (localStorage.getItem("members"));
       const user = [auth._id, members];
       dispatch(fetchAllMessages(user));
+      dispatch(fetchAllChat(auth._id));
       // console.log("USERRRRRRR", userDetails);
       // if (userDetails.name == chatMessages.sender || userDetails.name == chatMessages.receiver) {
       //   alert("goooooooooo");

@@ -20,6 +20,6 @@ store.dispatch(messagesThunk());
 //Loading user from local storage if any
 store.dispatch(loadUser());
 //Fetching all users from DB to show i chat
-store.dispatch(fetchAllChat());
+// store.dispatch(fetchAllChat());
 store.dispatch(fetchAllUsers());
 export default store;
