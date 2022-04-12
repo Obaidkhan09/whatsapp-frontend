@@ -1,5 +1,7 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
+import moment from 'moment';
+
 
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
@@ -14,25 +16,35 @@ import Picker from 'emoji-picker-react';
 import axios from '../../utils/axios'
 
 import '../styles/chatbar.css'
-import moment from 'moment';
+// import moment from 'moment';
+import Messages from './Messages';
+import { addNewMessage } from '../../features/chatSlice';
 
 export default function ChatBar() {
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const currentTime = new Date();
-    await axios.post("messages/new", {
-      name: "Hard Coded",
-      messages: value,
-      timeStamp: currentTime,
-      received: true
+    const currentTime = new Date().toUTCString();
+    const currentSender = auth.name;
+    const temp = {
+        message : value,
+        timeStamp : currentTime,
+        sender :currentSender,
+      }
+    await axios.post("chat/new", {
+      ...chatMessages,
+      messages : temp,
     });
     setValue("");
   }
   const [value, setValue] = useState("");
   const [status, setStatus] = useState(false);
-  const messages = useSelector((state) => state.messagesData.messages);
+  // const messages = useSelector((state) => state.messagesData.messages);
+  const dispatch = useDispatch();
+  const chatMessages = useSelector((state)=> state.chat.details);
+  const auth = useSelector((state) => state.auth);
+  const userDetails = useSelector((state)=> state.chat.details);
   const handleEmoji = (event, emojiObj) => {
-    setValue(value + emojiObj.emoji)
+    setValue(value + emojiObj.emoji);
   }
   const handleEmojiVisible = () => {
     setStatus(!status);
@@ -42,8 +54,10 @@ export default function ChatBar() {
       <div className="chat_header">
         <Avatar />
         <div className="chat_info">
-          <h4>Client 1</h4>
-          <p>last seen 05:25 today</p>
+          {console.log("chatMessagesssssssss",chatMessages)}
+          {console.log("MSGSSSSSSSS",chatMessages.messages[chatMessages.messages.length -1])}
+          <h4>{auth.name == chatMessages.sender? chatMessages.receiver : chatMessages.sender}</h4>
+          <p>{`Last Message ${moment(chatMessages.messages[chatMessages.messages.length -1].timeStamp).fromNow()}`}</p>
         </div>
         <div className="chat_icons">
           <IconButton>
@@ -58,14 +72,15 @@ export default function ChatBar() {
         </div>
       </div>
       <div className="chat_body">
-        {messages.map((items) => (
+        {/* {messages.map((items) => (
           <p key={items._id} className={`${items.received === true ? "chat_message" : "chat_receiver chat_message"}`}>
-            {/* <span className='chat_name'>Client 1</span> */}
+            <span className='chat_name'>Client 1</span>
             {items.messages}
             <span className='chat_time'>{moment(items.timeStamp).fromNow()}</span>
           </p>
         )
-        )}
+        )} */}
+        <Messages />
 
       </div>
 

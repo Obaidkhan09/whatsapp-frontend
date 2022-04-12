@@ -8,7 +8,6 @@ import axios from '../../utils/axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { toast } from "react-toastify";
-import { fetchAllChat } from '../../features/chatListSlice';
 
 export default function SignIn() {
   const auth = useSelector((state) => state.auth)
@@ -21,10 +20,7 @@ export default function SignIn() {
     try {
       const token = await axios.post('/api/signin', user);
       dispatch(signIn(token.data));
-      //Loading user from local storage if any
       dispatch(loadUser());
-      //Loading All Chat lists
-      dispatch(fetchAllChat());
       console.log(token);
       setUser({
         email: "",
@@ -42,7 +38,7 @@ export default function SignIn() {
         draggable: true,
         progress: undefined,
         theme: 'colored'
-      });
+        });
     }
   }
   if (auth?._id) { return <Navigate to='/home' /> }

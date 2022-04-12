@@ -2,7 +2,6 @@ import Avatar from '@mui/material/Avatar';
 import { useDispatch, useSelector } from 'react-redux';
 import "../styles/all-users.css"
 import axios from '../../utils/axios'
-import { fetchChat } from '../../features/chatSlice';
 
 export default function AllUser() {
     const dispatch = useDispatch();
@@ -12,7 +11,6 @@ export default function AllUser() {
         console.log("ID 1",id);
         console.log("ID 2",auth._id);
         const users = {user1 : id, user2 : auth._id}
-        dispatch(fetchChat(users));
     }
     return (
         <div>

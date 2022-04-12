@@ -1,5 +1,3 @@
-import ChatBar from "./components/chatbar/ChatBar";
-import SideBar from "./components/sidebar/SideBar";
 import Pusher from 'pusher-js'
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,13 +7,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import Auth from "./components/home/Auth";
 import Home from "./components/home/Home";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { addNewMessage } from "./features/chatListSlice";
+import { addNewMessage, fetchAllMessages } from "./features/chatSlice";
 
 
 function App() {
   const dispatch = useDispatch();
-  const messages = useSelector((state) => state.messagesData.messages);
-  console.log(messages);
+  const userDetails = useSelector((state) => state.chat.details);
+  const chatMessages = useSelector((state) => state.chat.details);
+  const auth = useSelector((state)=> state.auth);
+  // console.log("DETAILS", userDetails);
   // useEffect(() => {
   //   const pusher = new Pusher(process.env.REACT_APP_PUSHER_TOKEN, {
   //     cluster: 'ap2'
@@ -32,11 +32,18 @@ function App() {
     });
 
     const channel = pusher.subscribe('chat');
-    channel.bind('inserted', (data) => {
-      alert(data);
-    });
+    // channel.bind('inserted', (data) => {
+    //   alert(data);
+    // });
     channel.bind('updated', (data) => {
-      dispatch(addNewMessage(data));
+      const members = (localStorage.getItem("members"));
+      const user = [auth._id, members];
+      dispatch(fetchAllMessages(user));
+      // console.log("USERRRRRRR", userDetails);
+      // if (userDetails.name == chatMessages.sender || userDetails.name == chatMessages.receiver) {
+      //   alert("goooooooooo");
+      //   dispatch(addNewMessage(data));
+      // }
     });
   }, [])
   return (
@@ -54,11 +61,11 @@ function App() {
         pauseOnHover
       />
 
-      
+
       <BrowserRouter >
         <Routes>
-          <Route path="/" element={ <Auth /> } />
-          <Route path="/home" element={ <Home /> } />
+          <Route path="/" element={<Auth />} />
+          <Route path="/home" element={<Home />} />
         </Routes>
       </BrowserRouter>
     </div>
