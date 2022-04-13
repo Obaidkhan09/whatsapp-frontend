@@ -19,11 +19,12 @@ import '../styles/chatbar.css'
 // import moment from 'moment';
 import Messages from './Messages';
 import { fetchAllMessages } from '../../features/chatSlice';
+import { fetchAllChat } from '../../features/chatListSlice';
 
 export default function ChatBar({ refrence }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const currentTime = new Date().toUTCString();
+    const currentTime = new Date();
     const currentSender = auth.name;
     const temp = {
       message: value,
@@ -36,14 +37,34 @@ export default function ChatBar({ refrence }) {
         messages: temp,
       });
       setValue("");
-      dispatch(fetchAllMessages(auth._id));
     }
+  }
+  const createDoc = async(e) => {
+    e.preventDefault();
+    const currentTime = new Date();
+    const temp = {
+      message: value,
+      timeStamp: currentTime,
+      sender: auth.name,
+    }
+    await axios.post("chat/new", {
+      sender: auth.name,
+      receiver: newUser.name,
+      members: [auth._id, newUser.id],
+      messages: [temp],
+      timeStamp: currentTime,
+    });
+    setValue("");
+    localStorage.setItem("members", newUser.id);
+    
+
   }
   const [value, setValue] = useState("");
   const [status, setStatus] = useState(false);
   // const messages = useSelector((state) => state.messagesData.messages);
   const dispatch = useDispatch();
   const chatMessages = useSelector((state) => state.chat.details);
+  const newUser = useSelector((state) => state.chat.newUser);
   const auth = useSelector((state) => state.auth);
   const handleEmoji = (event, emojiObj) => {
     setValue(value + emojiObj.emoji);
@@ -56,10 +77,15 @@ export default function ChatBar({ refrence }) {
       <div className="chat_header">
         <Avatar />
         <div className="chat_info">
-          {/* {console.log("chatMessagesssssssss",chatMessages)}
-          {console.log("MSGSSSSSSSS",chatMessages.messages[chatMessages.messages.length -1])} */}
-          <h4>{auth.name === chatMessages.sender ? chatMessages.receiver : chatMessages.sender}</h4>
-          <p>{`Last Message ${moment(chatMessages.messages[chatMessages.messages.length - 1] ? chatMessages.messages[chatMessages.messages.length - 1].timeStamp : chatMessages.timeStamp).fromNow()}`}</p>
+          {/* {console.log("MSGSSSSSSSS",chatMessages.messages[chatMessages.messages.length -1])} */}
+          {newUser == null ?
+            <>
+              <h4>{auth.name === chatMessages.sender ? chatMessages.receiver : chatMessages.sender}</h4>
+              <p>{`Last Message ${moment(chatMessages.messages[chatMessages.messages.length - 1] ? chatMessages.messages[chatMessages.messages.length - 1].timeStamp : chatMessages.timeStamp).fromNow()}`}</p>
+            </>
+            :
+            <><h4>{newUser.name}</h4></>
+          }
         </div>
         <div className="chat_icons">
           <IconButton>
@@ -93,19 +119,40 @@ export default function ChatBar({ refrence }) {
         <IconButton onClick={handleEmojiVisible}>
           <SentimentSatisfiedAltIcon />
         </IconButton>
-        <form>
-          <input
-            autoFocus
-            //refrence passed as a prop from Home.jsx
-            ref={refrence}
-            value={value}
-            placeholder='Type a message'
-            onChange={(e) => { setValue(e.target.value) }}
-          />
-          <IconButton onClick={handleSubmit} type='submit'>
-            <SendIcon />
-          </IconButton>
-        </form>
+        {newUser == null ?
+          <>
+            <form>
+              <input
+                autoFocus
+                //refrence passed as a prop from Home.jsx
+                ref={refrence}
+                value={value}
+                placeholder='Type a message'
+                onChange={(e) => { setValue(e.target.value) }}
+              />
+              <IconButton onClick={handleSubmit} type='submit'>
+                <SendIcon />
+              </IconButton>
+            </form>
+          </>
+          :
+          <>
+            <form>
+              <input
+                autoFocus
+                //refrence passed as a prop from Home.jsx
+                ref={refrence}
+                value={value}
+                placeholder='Type a message'
+                onChange={(e) => { setValue(e.target.value) }}
+              />
+              <IconButton onClick={createDoc} type='submit'>
+                <SendIcon />
+              </IconButton>
+            </form>
+          </>
+        }
+
         <IconButton>
           <MicIcon />
         </IconButton>

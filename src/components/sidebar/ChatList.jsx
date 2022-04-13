@@ -24,14 +24,14 @@ export default function ChatList({ setChatBar, refrence }) {
   }
   return (
     <div>
-      {console.log("All Chat...!!", allChat)}
+      {/* {console.log("All Chat...!!", allChat)} */}
       {allChat ? allChat.map((items, i) => (
         <div key={items._id} className='chat_list' onClick={() => handleClick(items)}>
           <Avatar />
           <div className='chat_item'>
             <h4>{auth.name === items.receiver ? items.sender : items.receiver}</h4>
             <p>{items.messages[items.messages.length - 1] ? items.messages[items.messages.length - 1].message : ""}</p>
-            {console.log(items)}
+            {/* {console.log(items)} */}
           </div>
         </div>
       )) : []}

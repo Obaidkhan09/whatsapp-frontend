@@ -61,7 +61,7 @@ export default function SideBar({setChatBar, refrence}) {
                     <input type='text' placeholder='Search or start new chat' />
                 </div>
             </div>
-            {users? <AllUser setUsers={setUsers} /> : <ChatList refrence={refrence} setChatBar={setChatBar} /> }
+            {users? <AllUser setChatBar={setChatBar} setUsers={setUsers} /> : <ChatList refrence={refrence} setChatBar={setChatBar} /> }
             {/* ADD NEW CHAT */}
             <div>
                 <Dialog open={logout} onClose={handleClose}>

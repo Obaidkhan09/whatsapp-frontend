@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Auth from "./components/home/Auth";
 import Home from "./components/home/Home";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { addNewMessage, fetchAllMessages } from "./features/chatSlice";
+import { addNewMessage, fetchAllMessages, getUserData } from "./features/chatSlice";
 import { fetchAllChat } from './features/chatListSlice';
 
 
@@ -33,9 +33,12 @@ function App() {
     });
 
     const channel = pusher.subscribe('chat');
-    // channel.bind('inserted', (data) => {
-    //   alert(data);
-    // });
+    channel.bind('inserted', (data) => {
+      const members = (localStorage.getItem("members"));
+      const user = [auth._id, members];
+      dispatch(fetchAllMessages(user));
+      dispatch(fetchAllChat(auth._id));
+    });
     channel.bind('updated', (data) => {
       const members = (localStorage.getItem("members"));
       const user = [auth._id, members];
