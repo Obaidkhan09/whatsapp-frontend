@@ -18,8 +18,10 @@ import axios from '../../utils/axios'
 import '../styles/chatbar.css'
 // import moment from 'moment';
 import Messages from './Messages';
-import { fetchAllMessages } from '../../features/chatSlice';
-import { fetchAllChat } from '../../features/chatListSlice';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
 
 export default function ChatBar({ refrence }) {
   const handleSubmit = async (e) => {
@@ -39,7 +41,7 @@ export default function ChatBar({ refrence }) {
       setValue("");
     }
   }
-  const createDoc = async(e) => {
+  const createDoc = async (e) => {
     e.preventDefault();
     const currentTime = new Date();
     const temp = {
@@ -47,20 +49,21 @@ export default function ChatBar({ refrence }) {
       timeStamp: currentTime,
       sender: auth.name,
     }
-    await axios.post("chat/new", {
-      sender: auth.name,
-      receiver: newUser.name,
-      members: [auth._id, newUser.id],
-      messages: [temp],
-      timeStamp: currentTime,
-    });
-    setValue("");
-    localStorage.setItem("members", newUser.id);
-    
-
+    if (value !== "") {
+      await axios.post("chat/new", {
+        sender: auth.name,
+        receiver: newUser.name,
+        members: [auth._id, newUser.id],
+        messages: [temp],
+        timeStamp: currentTime,
+      });
+      setValue("");
+      localStorage.setItem("members", newUser.id);
+    }
   }
   const [value, setValue] = useState("");
   const [status, setStatus] = useState(false);
+  const [isOpen, setOpen] = useState(false);
   // const messages = useSelector((state) => state.messagesData.messages);
   const dispatch = useDispatch();
   const chatMessages = useSelector((state) => state.chat.details);
@@ -72,16 +75,29 @@ export default function ChatBar({ refrence }) {
   const handleEmojiVisible = () => {
     setStatus(!status);
   }
+  const handleOpen = () => {
+    setOpen(!isOpen);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleDelete = async() => {
+    console.log(chatMessages._id)
+    await axios.delete(`/chat/delete?id=${chatMessages._id}`);
+    setOpen(false);
+  }
   return (
     <div className='chat_bar'>
       <div className="chat_header">
         <Avatar />
         <div className="chat_info">
           {/* {console.log("MSGSSSSSSSS",chatMessages.messages[chatMessages.messages.length -1])} */}
-          {newUser == null ?
+          {newUser == null && chatMessages !== null ?
             <>
               <h4>{auth.name === chatMessages.sender ? chatMessages.receiver : chatMessages.sender}</h4>
               <p>{`Last Message ${moment(chatMessages.messages[chatMessages.messages.length - 1] ? chatMessages.messages[chatMessages.messages.length - 1].timeStamp : chatMessages.timeStamp).fromNow()}`}</p>
+              {/* <p>{`Last Message ${moment(chatMessages.timeStamp).fromNow()}`}</p> */}
             </>
             :
             <><h4>{newUser.name}</h4></>
@@ -95,19 +111,11 @@ export default function ChatBar({ refrence }) {
             <SearchIcon />
           </IconButton>
           <IconButton>
-            <MoreVertIcon />
+            <MoreVertIcon onClick={handleOpen} />
           </IconButton>
         </div>
       </div>
       <div className="chat_body">
-        {/* {messages.map((items) => (
-          <p key={items._id} className={`${items.received === true ? "chat_message" : "chat_receiver chat_message"}`}>
-            <span className='chat_name'>Client 1</span>
-            {items.messages}
-            <span className='chat_time'>{moment(items.timeStamp).fromNow()}</span>
-          </p>
-        )
-        )} */}
         <Messages />
 
       </div>
@@ -119,7 +127,7 @@ export default function ChatBar({ refrence }) {
         <IconButton onClick={handleEmojiVisible}>
           <SentimentSatisfiedAltIcon />
         </IconButton>
-        {newUser == null ?
+        {newUser === null && chatMessages !== null ?
           <>
             <form>
               <input
@@ -156,6 +164,25 @@ export default function ChatBar({ refrence }) {
         <IconButton>
           <MicIcon />
         </IconButton>
+      </div>
+      <div>
+        <Dialog open={isOpen} onClose={handleClose}>
+          <DialogTitle>Do you really wish to LogOut?</DialogTitle>
+          <DialogActions>
+            <Button
+              variant='outlined'
+              onClick={handleDelete}
+              style={{
+                color: '#E62E2D',
+                fontWeight: 600,
+                border: "1px solid #E62E2D",
+                textDecoration: "none",
+              }}
+            >
+              Delete Chat
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     </div>
   )

@@ -7,7 +7,7 @@ export const fetchAllMessages = createAsyncThunk(
         console.log("USERS", user)
         try {
             const response = await axios.get(`/chat/sync?user1=${user[0]}&&user2=${user[1]}`);
-            console.log("CHAT SLICE", response);
+            // console.log("CHAT SLICE", response);
             return response.data;
         } catch (error) {
             return ("An error occured");
@@ -39,6 +39,9 @@ const chatSlice = createSlice({
             state.messages.push(action.payload);
             // console.log("deikhoooo",JSON.stringify(state.messages.messages));
         },
+        clearMessages(state, action) {
+            state.messages = [];
+        }
     },
     extraReducers: {
         [fetchAllMessages.pending]: (state, action) => {
@@ -57,4 +60,4 @@ const chatSlice = createSlice({
 });
 
 export default chatSlice.reducer;
-export const { getUserData, addNewMessage, addNewUser } = chatSlice.actions;
+export const { getUserData, addNewMessage, addNewUser, clearMessages } = chatSlice.actions;

@@ -23,15 +23,7 @@ const initialState = {
 const chatListSlice = createSlice({
     name: "allChat",
     initialState,
-    reducers: {
-        // getUserData (state, action) {
-        //     state.details = action.payload;
-        // },
-        // addNewMessage (state, action) {
-        //     state.messages.messages.push(action.payload);
-        //     // console.log("deikhoooo",JSON.stringify(state.messages.messages));
-        // }
-    },
+    reducers: {},
     extraReducers: {
         [fetchAllChat.pending] : (state, action) => {
             state.status = "pending";
@@ -48,4 +40,3 @@ const chatListSlice = createSlice({
 });
 
 export default chatListSlice.reducer;
-export const { getUserData, addNewMessage } = chatListSlice.actions;

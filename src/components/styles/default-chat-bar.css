@@ -1,6 +1,7 @@
 .default {
     display: flex;
     justify-content: center;
+    flex: 0.7;
     /* align-items: center; */
     margin-top: auto;
     margin-bottom: auto;

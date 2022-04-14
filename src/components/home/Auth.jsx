@@ -9,7 +9,7 @@ import "../styles/auth.css"
 export default function Auth() {
 
     const [inn, setIn] = useState(true);
-    const [widthSize, setWidthSize] = useState('40%');
+    const widthSize = '40%'
     const [heightSize, setHeightSize] = useState("360px")
     const [innBorder, setInnBorder] = useState('1px solid #25D366');
     const [uppBorder, setUppBorder] = useState('none');

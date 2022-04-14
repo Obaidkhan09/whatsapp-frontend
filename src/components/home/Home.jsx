@@ -7,15 +7,19 @@ import "../styles/home.css"
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { fetchAllChat } from "../../features/chatListSlice";
+import { fetchAllUsers } from "../../features/usersSlice";
 
 export default function Home() {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const [isChatbar, setChatBar] = useState(false);
-  //Hole the refrence for input in ChatBar.jsx
+  //Hold the refrence for input in ChatBar.jsx
   const refrence = useRef(null);
   useEffect(()=> {
-    dispatch(fetchAllChat(auth._id))
+    //fetch all chat from DB to show in chat list
+    dispatch(fetchAllChat(auth._id));
+//Fetching all users from DB to show in chat
+    dispatch(fetchAllUsers());
   }, [dispatch])
   if (!auth?._id) { return <Navigate to="/" /> }
   return (

@@ -3,30 +3,17 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import { addNewMessages } from "./features/messagesSlice";
 import Auth from "./components/home/Auth";
 import Home from "./components/home/Home";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { addNewMessage, fetchAllMessages, getUserData } from "./features/chatSlice";
+import { fetchAllMessages, getUserData } from "./features/chatSlice";
 import { fetchAllChat } from './features/chatListSlice';
 
 
 function App() {
   const dispatch = useDispatch();
-  const userDetails = useSelector((state) => state.chat.details);
-  const chatMessages = useSelector((state) => state.chat.details);
   const auth = useSelector((state)=> state.auth);
-  // console.log("DETAILS", userDetails);
-  // useEffect(() => {
-  //   const pusher = new Pusher(process.env.REACT_APP_PUSHER_TOKEN, {
-  //     cluster: 'ap2'
-  //   });
 
-  //   const channel = pusher.subscribe('messages');
-  //   channel.bind('inserted', (data) => {
-  //     dispatch(addNewMessages(data));
-  //   });
-  // }, [])
   useEffect(() => {
     const pusher = new Pusher(process.env.REACT_APP_PUSHER_TOKEN, {
       cluster: 'ap2'
@@ -38,17 +25,15 @@ function App() {
       const user = [auth._id, members];
       dispatch(fetchAllMessages(user));
       dispatch(fetchAllChat(auth._id));
+      dispatch(getUserData(data))
+      console.log(data);
     });
     channel.bind('updated', (data) => {
       const members = (localStorage.getItem("members"));
       const user = [auth._id, members];
       dispatch(fetchAllMessages(user));
       dispatch(fetchAllChat(auth._id));
-      // console.log("USERRRRRRR", userDetails);
-      // if (userDetails.name == chatMessages.sender || userDetails.name == chatMessages.receiver) {
-      //   alert("goooooooooo");
-      //   dispatch(addNewMessage(data));
-      // }
+      console.log(data)
     });
   }, [])
   return (
