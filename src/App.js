@@ -12,7 +12,8 @@ import { fetchAllChat } from './features/chatListSlice';
 
 function App() {
   const dispatch = useDispatch();
-  const auth = useSelector((state)=> state.auth);
+  const auth = useSelector((state) => state.auth);
+
 
   useEffect(() => {
     const pusher = new Pusher(process.env.REACT_APP_PUSHER_TOKEN, {
@@ -33,8 +34,12 @@ function App() {
       const user = [auth._id, members];
       dispatch(fetchAllMessages(user));
       dispatch(fetchAllChat(auth._id));
-      console.log(data)
     });
+    channel.bind('deleted', (data) => {
+      if (data.result === "success") {
+        dispatch(fetchAllChat(auth._id));
+      }
+    })
   }, [])
   return (
     <div>

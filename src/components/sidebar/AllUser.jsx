@@ -6,9 +6,12 @@ import { addNewUser, clearMessages, fetchAllMessages, getUserData } from '../../
 
 export default function AllUser({ setUsers, setChatBar, refrence }) {
     const dispatch = useDispatch();
-    const users = useSelector((state) => state.allUsers.users);
+    let users = useSelector((state) => state.allUsers.users);
     const auth = useSelector((state) => state.auth);
     const allChat = useSelector((state) => state.allChat.data);
+    if (users !== []) {
+        users = users.filter((item) => item._id !== auth._id);
+    }
     const showChat = async (arg) => {
         // console.log("ID 1",arg.id);
         // console.log("ID 2",auth._id);

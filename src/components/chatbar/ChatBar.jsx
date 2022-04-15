@@ -23,7 +23,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function ChatBar({ refrence }) {
+export default function ChatBar({ refrence, setChatBar }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const currentTime = new Date();
@@ -39,6 +39,7 @@ export default function ChatBar({ refrence }) {
         messages: temp,
       });
       setValue("");
+      // console.log(chatMessages._id);
     }
   }
   const createDoc = async (e) => {
@@ -86,6 +87,7 @@ export default function ChatBar({ refrence }) {
     console.log(chatMessages._id)
     await axios.delete(`/chat/delete?id=${chatMessages._id}`);
     setOpen(false);
+    setChatBar(false);
   }
   return (
     <div className='chat_bar'>
@@ -110,8 +112,8 @@ export default function ChatBar({ refrence }) {
           <IconButton>
             <SearchIcon />
           </IconButton>
-          <IconButton>
-            <MoreVertIcon onClick={handleOpen} />
+          <IconButton onClick={handleOpen}>
+            <MoreVertIcon />
           </IconButton>
         </div>
       </div>
@@ -167,7 +169,7 @@ export default function ChatBar({ refrence }) {
       </div>
       <div>
         <Dialog open={isOpen} onClose={handleClose}>
-          <DialogTitle>Do you really wish to LogOut?</DialogTitle>
+          <DialogTitle>Do you really wish to Delete this Chat?</DialogTitle>
           <DialogActions>
             <Button
               variant='outlined'

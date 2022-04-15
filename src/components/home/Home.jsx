@@ -27,7 +27,7 @@ export default function Home() {
       <div className="app">
         <div className="app_window">
           <SideBar refrence={refrence} setChatBar={setChatBar} />
-          {isChatbar ? <ChatBar refrence={refrence} /> : <DefaultChatBar /> }
+          {isChatbar ? <ChatBar setChatBar={setChatBar} refrence={refrence} /> : <DefaultChatBar /> }
         </div>
       </div>
     </div>
